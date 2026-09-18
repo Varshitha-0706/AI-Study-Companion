@@ -3,10 +3,15 @@ from celery import Celery
 from app.core.config import settings
 
 celery_app = Celery(
-    "asc_worker",
+    "ai_study_companion",
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
-    include=["app.workers.document_pipeline", "app.workers.learning_workflow"],
+    broker_use_ssl={
+        "ssl_cert_reqs": "CERT_REQUIRED",
+    },
+    redis_backend_use_ssl={
+        "ssl_cert_reqs": "CERT_REQUIRED",
+    },
 )
 
 celery_app.conf.update(
