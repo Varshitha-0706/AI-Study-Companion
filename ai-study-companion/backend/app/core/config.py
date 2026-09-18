@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     # S3 (optional)
     S3_BUCKET: str = ""
     S3_REGION: str = "us-east-1"
+    S3_ENDPOINT_URL: str = ""  # e.g., "https://s3.amazonaws.com" or custom endpoint
     AWS_ACCESS_KEY_ID: str = ""
     AWS_SECRET_ACCESS_KEY: str = ""
 
