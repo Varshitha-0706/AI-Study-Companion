@@ -1,4 +1,5 @@
 """Celery application configuration."""
+import ssl
 from celery import Celery
 from app.core.config import settings
 
@@ -6,12 +7,12 @@ celery_app = Celery(
     "ai_study_companion",
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
-    broker_use_ssl={
-        "ssl_cert_reqs": "CERT_REQUIRED",
-    },
-    redis_backend_use_ssl={
-        "ssl_cert_reqs": "CERT_REQUIRED",
-    },
+   broker_use_ssl={
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
+},
+redis_backend_use_ssl={
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
+},
 )
 
 celery_app.conf.update(
