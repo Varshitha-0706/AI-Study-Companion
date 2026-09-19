@@ -94,30 +94,19 @@ async def _handle_upload(
     await db.commit()
 
     # Dispatch Celery processing task, or fallback to background thread
-    dispatched = False
-    try:
-        from app.workers.document_pipeline import process_document
-        task = process_document.delay(
-            material_id=str(material.id),
-            user_id=str(current_user.id),
-            project_id=str(project.id),
-        )
-        material.celery_task_id = task.id
-        await db.commit()
-        dispatched = True
-    except Exception as e:
-        print(f"[materials] Celery dispatch failed, using async fallback: {e}")
+       # Process document in the background without Celery.
+    # asyncio.to_thread() prevents the synchronous PDF/Gemini
+    # processing from blocking the FastAPI event loop.
+    from app.workers.document_pipeline import process_document_sync
 
-    if not dispatched:
-        from app.workers.document_pipeline import process_document_sync
-        asyncio.create_task(
-            asyncio.to_thread(
-                process_document_sync,
-                str(material.id),
-                str(current_user.id),
-                str(project.id),
-            )
+    asyncio.create_task(
+        asyncio.to_thread(
+            process_document_sync,
+            str(material.id),
+            str(current_user.id),
+            str(project.id),
         )
+    )
 
     return MaterialOut(
         id=material.id,
