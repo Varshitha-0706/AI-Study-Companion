@@ -3,7 +3,12 @@
  * Automatically injects JWT Bearer tokens and handles error responses.
  */
 
-const API_BASE = '/api/v1';
+const configuredApiBase = import.meta.env.VITE_API_BASE_URL;
+const API_BASE = configuredApiBase?.startsWith('http')
+  ? configuredApiBase
+  : import.meta.env.PROD
+    ? 'https://ai-study-companion-c0uj.onrender.com/api/v1'
+    : configuredApiBase || '/api/v1';
 
 export const getAuthToken = () => localStorage.getItem('asc_token');
 export const setAuthToken = (token) => localStorage.setItem('asc_token', token);
