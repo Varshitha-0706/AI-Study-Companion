@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     AWS_SECRET_ACCESS_KEY: str = ""
 
     # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:3000"
+    ALLOWED_ORIGINS: str = "http://localhost:3000,ai-study-companion-brk5htauq-varshitha-0706.vercel.app,https://ai-study-companion-xnkclsom5-varshitha-0706.vercel.app"
 
     # AI / RAG configuration
     RETRIEVAL_CONFIDENCE_THRESHOLD: float = 0.50
